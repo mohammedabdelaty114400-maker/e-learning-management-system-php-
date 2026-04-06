@@ -1,0 +1,1464 @@
+﻿<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>أدوات القياس والتقييم - برنامج تدريبي PHP والذكاء الاصطناعي</title>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Tajawal', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .slide {
+            display: none;
+            min-height: 100vh;
+            animation: fadeIn 0.6s ease;
+        }
+
+        .slide.active {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Tools Dashboard Screen */
+        .tools-dashboard-screen {
+            background: #f0f2f5;
+            padding: 0;
+        }
+
+        .dashboard-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .dashboard-header h1 {
+            font-size: 1.8rem;
+        }
+
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            color: rgba(255,255,255,0.9);
+            cursor: pointer;
+            transition: color 0.3s ease;
+            font-size: 1rem;
+        }
+
+        .back-btn:hover {
+            color: white;
+        }
+
+        .dashboard-content {
+            padding: 40px;
+            max-width: 1400px;
+            width: 100%;
+        }
+
+        .tools-intro {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 40px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            text-align: center;
+        }
+
+        .tools-intro h2 {
+            font-size: 2rem;
+            color: #1a1a2e;
+            margin-bottom: 20px;
+        }
+
+        .tools-intro p {
+            color: #666;
+            font-size: 1.1rem;
+            line-height: 2;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+        }
+
+        .tool-card {
+            background: white;
+            border-radius: 25px;
+            padding: 40px;
+            text-align: center;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .tool-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+
+        .tool-card:nth-child(1)::before { background: linear-gradient(90deg, #667eea, #764ba2); }
+        .tool-card:nth-child(2)::before { background: linear-gradient(90deg, #f093fb, #f5576c); }
+        .tool-card:nth-child(3)::before { background: linear-gradient(90deg, #43e97b, #38f9d7); }
+
+        .tool-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .tool-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+        }
+
+        .tool-icon {
+            width: 100px;
+            height: 100px;
+            border-radius: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 25px;
+            font-size: 3rem;
+            color: white;
+        }
+
+        .tool-card:nth-child(1) .tool-icon { background: linear-gradient(135deg, #667eea, #764ba2); }
+        .tool-card:nth-child(2) .tool-icon { background: linear-gradient(135deg, #f093fb, #f5576c); }
+        .tool-card:nth-child(3) .tool-icon { background: linear-gradient(135deg, #43e97b, #38f9d7); }
+
+        .tool-card h3 {
+            font-size: 1.5rem;
+            color: #1a1a2e;
+            margin-bottom: 15px;
+        }
+
+        .tool-card p {
+            color: #666;
+            font-size: 1rem;
+            line-height: 1.9;
+            margin-bottom: 25px;
+        }
+
+        .tool-stats {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            padding-top: 25px;
+            border-top: 1px solid #eee;
+        }
+
+        .tool-stat {
+            text-align: center;
+        }
+
+        .tool-stat-number {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: #1a1a2e;
+        }
+
+        .tool-stat-label {
+            color: #888;
+            font-size: 0.9rem;
+        }
+
+        .start-btn {
+            margin-top: 25px;
+            padding: 15px 40px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            border: none;
+            border-radius: 50px;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .tool-card:nth-child(1) .start-btn { background: linear-gradient(135deg, #667eea, #764ba2); }
+        .tool-card:nth-child(2) .start-btn { background: linear-gradient(135deg, #f093fb, #f5576c); }
+        .tool-card:nth-child(3) .start-btn { background: linear-gradient(135deg, #43e97b, #38f9d7); }
+
+        .start-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+
+        /* Assessment Screens */
+        .assessment-screen {
+            background: #f0f2f5;
+            padding: 0;
+        }
+
+        .assessment-header {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: white;
+            padding: 40px;
+            width: 100%;
+        }
+
+        .assessment-header h1 {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        .assessment-header p {
+            opacity: 0.9;
+        }
+
+        .assessment-content {
+            padding: 40px;
+            max-width: 1000px;
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        .progress-bar-container {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .progress-info {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 12px;
+            background: #e0e0e0;
+            border-radius: 6px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+
+        .question-card {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 25px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+        }
+
+        .question-number {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 10px;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+
+        .question-text {
+            font-size: 1.3rem;
+            color: #1a1a2e;
+            line-height: 2;
+            margin-bottom: 25px;
+        }
+
+        .options-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .option-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .option-item:hover {
+            background: #e8f4f8;
+            border-color: #667eea;
+        }
+
+        .option-item.selected {
+            background: #e8f4f8;
+            border-color: #667eea;
+        }
+
+        .option-item input[type="radio"] {
+            width: 22px;
+            height: 22px;
+            accent-color: #667eea;
+        }
+
+        .option-item label {
+            flex: 1;
+            cursor: pointer;
+            font-size: 1.1rem;
+            color: #444;
+        }
+
+        .true-false-options {
+            display: flex;
+            gap: 20px;
+        }
+
+        .tf-btn {
+            flex: 1;
+            padding: 20px;
+            border: 2px solid #e0e0e0;
+            background: white;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 1.2rem;
+            font-weight: 700;
+            transition: all 0.3s ease;
+        }
+
+        .tf-btn:hover, .tf-btn.selected {
+            border-color: #667eea;
+            background: #e8f4f8;
+            color: #667eea;
+        }
+
+        .tf-btn.correct {
+            border-color: #43e97b;
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+
+        .tf-btn.wrong {
+            border-color: #ff6b6b;
+            background: #ffebee;
+            color: #c62828;
+        }
+
+        .assessment-nav {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+        }
+
+        .nav-btn {
+            padding: 15px 40px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .nav-btn-primary {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+        }
+
+        .nav-btn-secondary {
+            background: white;
+            color: #667eea;
+            border: 2px solid #667eea;
+        }
+
+        .nav-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+        }
+
+        .nav-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Observation Card Screen */
+        .observation-screen {
+            background: #f0f2f5;
+            padding: 0;
+        }
+
+        .observation-content {
+            padding: 40px;
+            max-width: 1200px;
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        .skill-category {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 25px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+        }
+
+        .skill-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .skill-title {
+            font-size: 1.4rem;
+            color: #1a1a2e;
+            font-weight: 700;
+        }
+
+        .skill-score {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 10px 25px;
+            border-radius: 25px;
+            font-weight: 700;
+        }
+
+        .skill-items {
+            display: grid;
+            gap: 15px;
+        }
+
+        .skill-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 12px;
+        }
+
+        .skill-item-text {
+            flex: 1;
+            color: #444;
+            font-size: 1.05rem;
+        }
+
+        .rating-scale {
+            display: flex;
+            gap: 10px;
+        }
+
+        .rating-btn {
+            width: 50px;
+            height: 50px;
+            border: 2px solid #ddd;
+            background: white;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 700;
+            transition: all 0.3s ease;
+        }
+
+        .rating-btn:hover {
+            border-color: #667eea;
+            color: #667eea;
+        }
+
+        .rating-btn.selected {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border-color: transparent;
+        }
+
+        .rating-legend {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 30px;
+            padding: 20px;
+            background: white;
+            border-radius: 15px;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .legend-color {
+            width: 25px;
+            height: 25px;
+            border-radius: 6px;
+        }
+
+        .legend-color.high { background: #43e97b; }
+        .legend-color.medium { background: #f9ca24; }
+        .legend-color.low { background: #ff6b6b; }
+
+        /* Digital Awareness Scale */
+        .awareness-screen {
+            background: #f0f2f5;
+            padding: 0;
+        }
+
+        .awareness-content {
+            padding: 40px;
+            max-width: 1000px;
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        .dimension-card {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 25px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+        }
+
+        .dimension-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .dimension-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            color: white;
+        }
+
+        .dimension-icon.cognitive { background: linear-gradient(135deg, #667eea, #764ba2); }
+        .dimension-icon.technical { background: linear-gradient(135deg, #f093fb, #f5576c); }
+        .dimension-icon.ethical { background: linear-gradient(135deg, #43e97b, #38f9d7); }
+        .dimension-icon.social { background: linear-gradient(135deg, #f9ca24, #f093fb); }
+        .dimension-icon.emotional { background: linear-gradient(135deg, #4facfe, #00f2fe); }
+
+        .dimension-title h3 {
+            color: #1a1a2e;
+            font-size: 1.3rem;
+        }
+
+        .dimension-title p {
+            color: #888;
+            font-size: 0.95rem;
+        }
+
+        .statement-item {
+            padding: 25px;
+            background: #f8f9fa;
+            border-radius: 12px;
+            margin-bottom: 15px;
+        }
+
+        .statement-text {
+            color: #444;
+            font-size: 1.1rem;
+            line-height: 1.9;
+            margin-bottom: 20px;
+        }
+
+        .likert-scale {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+        }
+
+        .likert-btn {
+            flex: 1;
+            padding: 15px 10px;
+            border: 2px solid #e0e0e0;
+            background: white;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .likert-btn:hover {
+            border-color: #667eea;
+            color: #667eea;
+        }
+
+        .likert-btn.selected {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border-color: transparent;
+        }
+
+        /* Results Screen */
+        .results-screen {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 40px;
+        }
+
+        .results-container {
+            background: white;
+            border-radius: 30px;
+            padding: 60px;
+            max-width: 800px;
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.3);
+        }
+
+        .results-icon {
+            width: 150px;
+            height: 150px;
+            background: linear-gradient(135deg, #43e97b, #38f9d7);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 30px;
+            font-size: 5rem;
+            color: white;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .results-container h2 {
+            font-size: 2.2rem;
+            color: #1a1a2e;
+            margin-bottom: 20px;
+        }
+
+        .score-display {
+            font-size: 5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin: 30px 0;
+        }
+
+        .score-message {
+            font-size: 1.3rem;
+            color: #666;
+            margin-bottom: 40px;
+        }
+
+        .results-details {
+            background: #f8f9fa;
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+
+        .result-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 15px 0;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .result-item:last-child {
+            border-bottom: none;
+        }
+
+        .result-label {
+            color: #666;
+        }
+
+        .result-value {
+            font-weight: 700;
+            color: #1a1a2e;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+        }
+
+        .action-btn {
+            padding: 18px 40px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .action-btn-primary {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+        }
+
+        .action-btn-secondary {
+            background: white;
+            color: #667eea;
+            border: 2px solid #667eea;
+        }
+
+        .action-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+        }
+
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .tools-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .assessment-nav {
+                flex-direction: column;
+                gap: 15px;
+            }
+            .true-false-options {
+                flex-direction: column;
+            }
+            .likert-scale {
+                flex-wrap: wrap;
+            }
+            .rating-scale {
+                flex-wrap: wrap;
+            }
+        }
+
+        /* Print styles for reports */
+        @media print {
+            .dashboard-header, .assessment-nav, .nav-dots {
+                display: none !important;
+            }
+            .slide {
+                display: block !important;
+                page-break-after: always;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Slide 10: Tools Dashboard -->
+    <div class="slide tools-dashboard-screen active" id="slide-10">
+        <div class="dashboard-header">
+            <div class="back-btn" onclick="goToSlide(2)">
+                <i class="fas fa-arrow-right"></i>
+                العودة للوحة التحكم
+            </div>
+            <h1><i class="fas fa-tools"></i> أدوات القياس والتقييم</h1>
+            <div style="width: 100px;"></div>
+        </div>
+
+        <div class="dashboard-content">
+            <div class="tools-intro">
+                <h2><i class="fas fa-clipboard-check gradient-text"></i> أدوات البحث العلمي</h2>
+                <p>
+                    يتضمن البرنامج التدريبي ثلاث أدوات قياس علمية مصممة وفق المعايير الأكاديمية 
+                    لقياس فاعلية البرنامج في تنمية مهارات البرمجة بلغة PHP والوعي الرقمي لدى المعلمين.
+                    جميع الأدوات تم التحقق من صدقها وثباتها إحصائياً.
+                </p>
+            </div>
+
+            <div class="tools-grid">
+                <!-- Achievement Test -->
+                <div class="tool-card" onclick="goToSlide(11)">
+                    <div class="tool-icon">
+                        <i class="fas fa-file-alt"></i>
+                    </div>
+                    <h3>الاختبار التحصيلي</h3>
+                    <p>
+                        اختبار معرفي مقنن يقيس الجوانب المعرفية لمهارات البرمجة بلغة PHP.
+                        يتضمن 30 فقرة موزعة على مستويات Bloom المعرفية (تذكر، فهم، تطبيق، تحليل).
+                    </p>
+                    <div class="tool-stats">
+                        <div class="tool-stat">
+                            <div class="tool-stat-number">30</div>
+                            <div class="tool-stat-label">فقرة</div>
+                        </div>
+                        <div class="tool-stat">
+                            <div class="tool-stat-number">60</div>
+                            <div class="tool-stat-label">درجة</div>
+                        </div>
+                        <div class="tool-stat">
+                            <div class="tool-stat-number">45</div>
+                            <div class="tool-stat-label">دقيقة</div>
+                        </div>
+                    </div>
+                    <button class="start-btn">
+                        <i class="fas fa-play"></i>
+                        بدء الاختبار
+                    </button>
+                </div>
+
+                <!-- Observation Card -->
+                <div class="tool-card" onclick="goToSlide(12)">
+                    <div class="tool-icon">
+                        <i class="fas fa-clipboard-list"></i>
+                    </div>
+                    <h3>بطاقة ملاحظة الأداء</h3>
+                    <p>
+                        أداة قياس الأداء المهاري العملي للبرمجة بلغة PHP.
+                        تتضمن 89 مؤشر أداء موزعة على 17 مهارة رئيسية مع مقياس رباعي (0-2).
+                    </p>
+                    <div class="tool-stats">
+                        <div class="tool-stat">
+                            <div class="tool-stat-number">89</div>
+                            <div class="tool-stat-label">مؤشر</div>
+                        </div>
+                        <div class="tool-stat">
+                            <div class="tool-stat-number">178</div>
+                            <div class="tool-stat-label">درجة</div>
+                        </div>
+                        <div class="tool-stat">
+                            <div class="tool-stat-number">55</div>
+                            <div class="tool-stat-label">دقيقة</div>
+                        </div>
+                    </div>
+                    <button class="start-btn">
+                        <i class="fas fa-eye"></i>
+                        عرض البطاقة
+                    </button>
+                </div>
+
+                <!-- Digital Awareness Scale -->
+                <div class="tool-card" onclick="goToSlide(13)">
+                    <div class="tool-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h3>مقياس الوعي الرقمي</h3>
+                    <p>
+                        مقياس مواقف لقياس أبعاد الوعي الرقمي الخمسة (المعرفي، التقني، الأخلاقي، الاجتماعي، الوجداني).
+                        يتضمن 20 موقفاً سلوكياً بثلاث بدائل لكل موقف.
+                    </p>
+                    <div class="tool-stats">
+                        <div class="tool-stat">
+                            <div class="tool-stat-number">20</div>
+                            <div class="tool-stat-label">موقف</div>
+                        </div>
+                        <div class="tool-stat">
+                            <div class="tool-stat-number">60</div>
+                            <div class="tool-stat-label">درجة</div>
+                        </div>
+                        <div class="tool-stat">
+                            <div class="tool-stat-number">35</div>
+                            <div class="tool-stat-label">دقيقة</div>
+                        </div>
+                    </div>
+                    <button class="start-btn">
+                        <i class="fas fa-poll"></i>
+                        بدء المقياس
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 11: Achievement Test -->
+    <div class="slide assessment-screen" id="slide-11">
+        <div class="assessment-header">
+            <div class="back-btn" onclick="goToSlide(10)">
+                <i class="fas fa-arrow-right"></i>
+                العودة لأدوات القياس
+            </div>
+            <h1><i class="fas fa-file-alt"></i> الاختبار التحصيلي</h1>
+            <p>قياس الجوانب المعرفية لمهارات البرمجة بلغة PHP</p>
+        </div>
+
+        <div class="assessment-content">
+            <div class="progress-bar-container">
+                <div class="progress-info">
+                    <span>تقدم الاختبار</span>
+                    <span id="testProgress">1 / 30</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="testProgressBar" style="width: 3.33%"></div>
+                </div>
+            </div>
+
+            <!-- Question 1: Multiple Choice -->
+            <div class="question-card" id="q1">
+                <span class="question-number">السؤال 1</span>
+                <p class="question-text">
+                    ما هو الامتداد الصحيح لملفات PHP؟
+                </p>
+                <div class="options-list">
+                    <label class="option-item" onclick="selectOption(this)">
+                        <input type="radio" name="q1" value="a">
+                        <span>.html</span>
+                    </label>
+                    <label class="option-item" onclick="selectOption(this)">
+                        <input type="radio" name="q1" value="b">
+                        <span>.php</span>
+                    </label>
+                    <label class="option-item" onclick="selectOption(this)">
+                        <input type="radio" name="q1" value="c">
+                        <span>.css</span>
+                    </label>
+                    <label class="option-item" onclick="selectOption(this)">
+                        <input type="radio" name="q1" value="d">
+                        <span>.js</span>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Question 2: True/False -->
+            <div class="question-card" id="q2" style="display: none;">
+                <span class="question-number">السؤال 2</span>
+                <p class="question-text">
+                    الدالة echo في PHP تستخدم لطباعة النصوص فقط ولا يمكن استخدامها مع المتغيرات.
+                </p>
+                <div class="true-false-options">
+                    <button class="tf-btn" onclick="selectTF(this, false)">
+                        <i class="fas fa-check"></i> صح
+                    </button>
+                    <button class="tf-btn" onclick="selectTF(this, true)">
+                        <i class="fas fa-times"></i> خطأ
+                    </button>
+                </div>
+            </div>
+
+            <!-- Question 3: Code Analysis -->
+            <div class="question-card" id="q3" style="display: none;">
+                <span class="question-number">السؤال 3</span>
+                <p class="question-text">
+                    ما هو ناتج تنفيذ الكود التالي؟
+                </p>
+                <div style="background: #1a1a2e; color: #a8d8ea; padding: 20px; border-radius: 12px; margin-bottom: 20px; font-family: monospace; text-align: left; direction: ltr;">
+                    &lt;?php<br>
+                    &nbsp;&nbsp;$x = 5;<br>
+                    &nbsp;&nbsp;$y = 10;<br>
+                    &nbsp;&nbsp;echo $x + $y;<br>
+                    ?&gt;
+                </div>
+                <div class="options-list">
+                    <label class="option-item" onclick="selectOption(this)">
+                        <input type="radio" name="q3" value="a">
+                        <span>510</span>
+                    </label>
+                    <label class="option-item" onclick="selectOption(this)">
+                        <input type="radio" name="q3" value="b">
+                        <span>15</span>
+                    </label>
+                    <label class="option-item" onclick="selectOption(this)">
+                        <input type="radio" name="q3" value="c">
+                        <span>5 + 10</span>
+                    </label>
+                    <label class="option-item" onclick="selectOption(this)">
+                        <input type="radio" name="q3" value="d">
+                        <span>خطأ</span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="assessment-nav">
+                <button class="nav-btn nav-btn-secondary" onclick="prevQuestion()" id="prevQ" disabled>
+                    <i class="fas fa-arrow-right"></i>
+                    السابق
+                </button>
+                <button class="nav-btn nav-btn-primary" onclick="nextQuestion()" id="nextQ">
+                    التالي
+                    <i class="fas fa-arrow-left"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 12: Observation Card -->
+    <div class="slide observation-screen" id="slide-12">
+        <div class="assessment-header">
+            <div class="back-btn" onclick="goToSlide(10)">
+                <i class="fas fa-arrow-right"></i>
+                العودة لأدوات القياس
+            </div>
+            <h1><i class="fas fa-clipboard-list"></i> بطاقة ملاحظة الأداء المهاري</h1>
+            <p>قياس الجوانب الأدائية لمهارات البرمجة بلغة PHP</p>
+        </div>
+
+        <div class="observation-content">
+            <div class="progress-bar-container">
+                <div class="progress-info">
+                    <span>المهارة الحالية</span>
+                    <span>1 / 17</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 5.88%"></div>
+                </div>
+            </div>
+
+            <!-- Skill Category 1 -->
+            <div class="skill-category">
+                <div class="skill-header">
+                    <span class="skill-title"><i class="fas fa-info-circle"></i> المهارة الأولى: معلومات عامة عن لغة PHP</span>
+                    <span class="skill-score">0 / 6</span>
+                </div>
+                <div class="skill-items">
+                    <div class="skill-item">
+                        <span class="skill-item-text">1. يذكر تعريفاً صحيحاً للغة PHP</span>
+                        <div class="rating-scale">
+                            <button class="rating-btn" onclick="rateSkill(this, 0)">0</button>
+                            <button class="rating-btn" onclick="rateSkill(this, 1)">1</button>
+                            <button class="rating-btn" onclick="rateSkill(this, 2)">2</button>
+                        </div>
+                    </div>
+                    <div class="skill-item">
+                        <span class="skill-item-text">2. يذكر استخدامات PHP في تطوير الويب</span>
+                        <div class="rating-scale">
+                            <button class="rating-btn" onclick="rateSkill(this, 0)">0</button>
+                            <button class="rating-btn" onclick="rateSkill(this, 1)">1</button>
+                            <button class="rating-btn" onclick="rateSkill(this, 2)">2</button>
+                        </div>
+                    </div>
+                    <div class="skill-item">
+                        <span class="skill-item-text">3. يفرق بين PHP ولغات البرمجة الأخرى</span>
+                        <div class="rating-scale">
+                            <button class="rating-btn" onclick="rateSkill(this, 0)">0</button>
+                            <button class="rating-btn" onclick="rateSkill(this, 1)">1</button>
+                            <button class="rating-btn" onclick="rateSkill(this, 2)">2</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Skill Category 2 -->
+            <div class="skill-category">
+                <div class="skill-header">
+                    <span class="skill-title"><i class="fas fa-cog"></i> المهارة الثانية: فتح PHP على الجهاز والتعامل معها</span>
+                    <span class="skill-score">0 / 6</span>
+                </div>
+                <div class="skill-items">
+                    <div class="skill-item">
+                        <span class="skill-item-text">4. يثبت بيئة العمل (XAMPP) بشكل صحيح</span>
+                        <div class="rating-scale">
+                            <button class="rating-btn" onclick="rateSkill(this, 0)">0</button>
+                            <button class="rating-btn" onclick="rateSkill(this, 1)">1</button>
+                            <button class="rating-btn" onclick="rateSkill(this, 2)">2</button>
+                        </div>
+                    </div>
+                    <div class="skill-item">
+                        <span class="skill-item-text">5. يشغل Apache وMySQL من لوحة التحكم</span>
+                        <div class="rating-scale">
+                            <button class="rating-btn" onclick="rateSkill(this, 0)">0</button>
+                            <button class="rating-btn" onclick="rateSkill(this, 1)">1</button>
+                            <button class="rating-btn" onclick="rateSkill(this, 2)">2</button>
+                        </div>
+                    </div>
+                    <div class="skill-item">
+                        <span class="skill-item-text">6. يصل إلى المجلد htdocs وينشئ ملفاً جديداً</span>
+                        <div class="rating-scale">
+                            <button class="rating-btn" onclick="rateSkill(this, 0)">0</button>
+                            <button class="rating-btn" onclick="rateSkill(this, 1)">1</button>
+                            <button class="rating-btn" onclick="rateSkill(this, 2)">2</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Skill Category 3 -->
+            <div class="skill-category">
+                <div class="skill-header">
+                    <span class="skill-title"><i class="fas fa-file-code"></i> المهارة الثالثة: إنشاء صفحة بلغة PHP</span>
+                    <span class="skill-score">0 / 6</span>
+                </div>
+                <div class="skill-items">
+                    <div class="skill-item">
+                        <span class="skill-item-text">7. يكتب الوسم الافتتاحي &lt;?php بشكل صحيح</span>
+                        <div class="rating-scale">
+                            <button class="rating-btn" onclick="rateSkill(this, 0)">0</button>
+                            <button class="rating-btn" onclick="rateSkill(this, 1)">1</button>
+                            <button class="rating-btn" onclick="rateSkill(this, 2)">2</button>
+                        </div>
+                    </div>
+                    <div class="skill-item">
+                        <span class="skill-item-text">8. ينهي الجمل البرمجية بفاصلة منقوطة ;</span>
+                        <div class="rating-scale">
+                            <button class="rating-btn" onclick="rateSkill(this, 0)">0</button>
+                            <button class="rating-btn" onclick="rateSkill(this, 1)">1</button>
+                            <button class="rating-btn" onclick="rateSkill(this, 2)">2</button>
+                        </div>
+                    </div>
+                    <div class="skill-item">
+                        <span class="skill-item-text">9. يحفظ الملف بالامتداد الصحيح .php</span>
+                        <div class="rating-scale">
+                            <button class="rating-btn" onclick="rateSkill(this, 0)">0</button>
+                            <button class="rating-btn" onclick="rateSkill(this, 1)">1</button>
+                            <button class="rating-btn" onclick="rateSkill(this, 2)">2</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="rating-legend">
+                <div class="legend-item">
+                    <div class="legend-color high"></div>
+                    <span>2 = أدى بدرجة عالية</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color medium"></div>
+                    <span>1 = أدى بدرجة متوسطة</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color low"></div>
+                    <span>0 = لم يؤدِ</span>
+                </div>
+            </div>
+
+            <div class="assessment-nav">
+                <button class="nav-btn nav-btn-secondary" onclick="goToSlide(10)">
+                    <i class="fas fa-arrow-right"></i>
+                    رجوع
+                </button>
+                <button class="nav-btn nav-btn-primary" onclick="alert('تم حفظ تقييم البطاقة بنجاح!')">
+                    <i class="fas fa-save"></i>
+                    حفظ التقييم
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 13: Digital Awareness Scale -->
+    <div class="slide awareness-screen" id="slide-13">
+        <div class="assessment-header">
+            <div class="back-btn" onclick="goToSlide(10)">
+                <i class="fas fa-arrow-right"></i>
+                العودة لأدوات القياس
+            </div>
+            <h1><i class="fas fa-shield-alt"></i> مقياس الوعي الرقمي</h1>
+            <p>قياس أبعاد الوعي الرقمي لدى معلمي الحاسب الآلي</p>
+        </div>
+
+        <div class="awareness-content">
+            <div class="progress-bar-container">
+                <div class="progress-info">
+                    <span>تقدم المقياس</span>
+                    <span>البعد الأول من خمسة</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 20%"></div>
+                </div>
+            </div>
+
+            <!-- Cognitive Dimension -->
+            <div class="dimension-card">
+                <div class="dimension-header">
+                    <div class="dimension-icon cognitive">
+                        <i class="fas fa-brain"></i>
+                    </div>
+                    <div class="dimension-title">
+                        <h3>البعد المعرفي</h3>
+                        <p>المعرفة بالمفاهيم والمصطلحات التقنية</p>
+                    </div>
+                </div>
+
+                <div class="statement-item">
+                    <p class="statement-text">
+                        1. أستطيع تعريف مفهوم الأمن السيبراني وشرح أهميته في حماية البيانات.
+                    </p>
+                    <div class="likert-scale">
+                        <button class="likert-btn" onclick="selectLikert(this)">لا تنطبق</button>
+                        <button class="likert-btn" onclick="selectLikert(this)">تنطبق إلى حد ما</button>
+                        <button class="likert-btn" onclick="selectLikert(this)">تنطبق</button>
+                    </div>
+                </div>
+
+                <div class="statement-item">
+                    <p class="statement-text">
+                        2. أعرف الفرق بين البرمجيات المفتوحة المصدر والبرمجيات المغلقة.
+                    </p>
+                    <div class="likert-scale">
+                        <button class="likert-btn" onclick="selectLikert(this)">لا تنطبق</button>
+                        <button class="likert-btn" onclick="selectLikert(this)">تنطبق إلى حد ما</button>
+                        <button class="likert-btn" onclick="selectLikert(this)">تنطبق</button>
+                    </div>
+                </div>
+
+                <div class="statement-item">
+                    <p class="statement-text">
+                        3. أفهم مفهوم الذكاء الاصطناعي وكيفية تطبيقه في التعليم.
+                    </p>
+                    <div class="likert-scale">
+                        <button class="likert-btn" onclick="selectLikert(this)">لا تنطبق</button>
+                        <button class="likert-btn" onclick="selectLikert(this)">تنطبق إلى حد ما</button>
+                        <button class="likert-btn" onclick="selectLikert(this)">تنطبق</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Technical Dimension -->
+            <div class="dimension-card">
+                <div class="dimension-header">
+                    <div class="dimension-icon technical">
+                        <i class="fas fa-laptop-code"></i>
+                    </div>
+                    <div class="dimension-title">
+                        <h3>البعد التقني</h3>
+                        <p>المهارات العملية في استخدام التقنيات</p>
+                    </div>
+                </div>
+
+                <div class="statement-item">
+                    <p class="statement-text">
+                        4. أستطيع حماية حساباتي الرقمية باستخدام كلمات مرور قوية وتوثيق ثنائي.
+                    </p>
+                    <div class="likert-scale">
+                        <button class="likert-btn" onclick="selectLikert(this)">لا تنطبق</button>
+                        <button class="likert-btn" onclick="selectLikert(this)">تنطبق إلى حد ما</button>
+                        <button class="likert-btn" onclick="selectLikert(this)">تنطبق</button>
+                    </div>
+                </div>
+
+                <div class="statement-item">
+                    <p class="statement-text">
+                        5. أستطيع التعرف على الرسائل الاحتيالية والروابط المشبوهة وتجنبها.
+                    </p>
+                    <div class="likert-scale">
+                        <button class="likert-btn" onclick="selectLikert(this)">لا تنطبق</button>
+                        <button class="likert-btn" onclick="selectLikert(this)">تنطبق إلى حد ما</button>
+                        <button class="likert-btn" onclick="selectLikert(this)">تنطبق</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Ethical Dimension -->
+            <div class="dimension-card">
+                <div class="dimension-header">
+                    <div class="dimension-icon ethical">
+                        <i class="fas fa-balance-scale"></i>
+                    </div>
+                    <div class="dimension-title">
+                        <h3>البعد الأخلاقي</h3>
+                        <p>الالتزام بالقيم والأخلاقيات الرقمية</p>
+                    </div>
+                </div>
+
+                <div class="statement-item">
+                    <p class="statement-text">
+                        6. أحترم حقوق الملكية الفكرية عند استخدام المحتوى الرقمي.
+                    </p>
+                    <div class="likert-scale">
+                        <button class="likert-btn" onclick="selectLikert(this)">لا تنطبق</button>
+                        <button class="likert-btn" onclick="selectLikert(this)">تنطبق إلى حد ما</button>
+                        <button class="likert-btn" onclick="selectLikert(this)">تنطبق</button>
+                    </div>
+                </div>
+
+                <div class="statement-item">
+                    <p class="statement-text">
+                        7. أحرص على عدم نشر معلومات شخصية عن الآخرين دون إذنهم.
+                    </p>
+                    <div class="likert-scale">
+                        <button class="likert-btn" onclick="selectLikert(this)">لا تنطبق</button>
+                        <button class="likert-btn" onclick="selectLikert(this)">تنطبق إلى حد ما</button>
+                        <button class="likert-btn" onclick="selectLikert(this)">تنطبق</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="assessment-nav">
+                <button class="nav-btn nav-btn-secondary" onclick="goToSlide(10)">
+                    <i class="fas fa-arrow-right"></i>
+                    رجوع
+                </button>
+                <button class="nav-btn nav-btn-primary" onclick="showResults()">
+                    إنهاء المقياس وعرض النتائج
+                    <i class="fas fa-chart-bar"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 14: Results -->
+    <div class="slide results-screen" id="slide-14">
+        <div class="results-container">
+            <div class="results-icon">
+                <i class="fas fa-trophy"></i>
+            </div>
+            
+            <h2>تهانينا! أكملت التقييم بنجاح</h2>
+            
+            <div class="score-display" id="finalScore">85%</div>
+            
+            <p class="score-message">
+                لقد أظهرت مستوى ممتاز في مهارات البرمجة والوعي الرقمي
+            </p>
+
+            <div class="results-details">
+                <div class="result-item">
+                    <span class="result-label">الاختبار التحصيلي</span>
+                    <span class="result-value">28/30</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-label">بطاقة الملاحظة</span>
+                    <span class="result-value">156/178</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-label">مقياس الوعي الرقمي</span>
+                    <span class="result-value">52/60</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-label">المجموع الكلي</span>
+                    <span class="result-value gradient-text" style="font-size: 1.3rem;">236/268</span>
+                </div>
+            </div>
+
+            <div class="action-buttons">
+                <button class="action-btn action-btn-primary" onclick="window.print()">
+                    <i class="fas fa-print"></i>
+                    طباعة التقرير
+                </button>
+                <button class="action-btn action-btn-secondary" onclick="goToSlide(10)">
+                    <i class="fas fa-redo"></i>
+                    تقييم جديد
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navigation Dots -->
+    <div class="nav-dots" style="position: fixed; left: 30px; top: 50%; transform: translateY(-50%); display: flex; flex-direction: column; gap: 15px; z-index: 100;">
+        <div class="nav-dot" onclick="goToSlide(10)" style="width: 14px; height: 14px; border-radius: 50%; background: rgba(102, 126, 234, 0.4); cursor: pointer; transition: all 0.3s ease;"></div>
+        <div class="nav-dot" onclick="goToSlide(11)" style="width: 14px; height: 14px; border-radius: 50%; background: rgba(102, 126, 234, 0.4); cursor: pointer; transition: all 0.3s ease;"></div>
+        <div class="nav-dot" onclick="goToSlide(12)" style="width: 14px; height: 14px; border-radius: 50%; background: rgba(102, 126, 234, 0.4); cursor: pointer; transition: all 0.3s ease;"></div>
+        <div class="nav-dot" onclick="goToSlide(13)" style="width: 14px; height: 14px; border-radius: 50%; background: rgba(102, 126, 234, 0.4); cursor: pointer; transition: all 0.3s ease;"></div>
+    </div>
+
+    <script>
+        let currentSlide = 10;
+        let currentQuestion = 1;
+        const totalQuestions = 3;
+
+        function goToSlide(n) {
+            document.querySelectorAll('.slide').forEach(s => s.classList.remove('active'));
+            document.getElementById(`slide-${n}`).classList.add('active');
+            currentSlide = n;
+        }
+
+        function selectOption(element) {
+            element.parentElement.querySelectorAll('.option-item').forEach(opt => {
+                opt.classList.remove('selected');
+            });
+            element.classList.add('selected');
+            element.querySelector('input').checked = true;
+        }
+
+        function selectTF(element, isCorrect) {
+            element.parentElement.querySelectorAll('.tf-btn').forEach(btn => {
+                btn.classList.remove('selected', 'correct', 'wrong');
+            });
+            
+            if (isCorrect) {
+                element.classList.add('selected', 'correct');
+            } else {
+                element.classList.add('selected', 'wrong');
+                // Show correct answer
+                element.parentElement.querySelectorAll('.tf-btn').forEach(btn => {
+                    if (!btn.classList.contains('wrong')) {
+                        btn.classList.add('correct');
+                    }
+                });
+            }
+        }
+
+        function rateSkill(element, score) {
+            element.parentElement.querySelectorAll('.rating-btn').forEach(btn => {
+                btn.classList.remove('selected');
+            });
+            element.classList.add('selected');
+        }
+
+        function selectLikert(element) {
+            element.parentElement.querySelectorAll('.likert-btn').forEach(btn => {
+                btn.classList.remove('selected');
+            });
+            element.classList.add('selected');
+        }
+
+        function nextQuestion() {
+            if (currentQuestion < totalQuestions) {
+                document.getElementById(`q${currentQuestion}`).style.display = 'none';
+                currentQuestion++;
+                document.getElementById(`q${currentQuestion}`).style.display = 'block';
+                
+                document.getElementById('testProgress').textContent = `${currentQuestion} / 30`;
+                document.getElementById('testProgressBar').style.width = `${(currentQuestion / 30) * 100}%`;
+                
+                document.getElementById('prevQ').disabled = false;
+                
+                if (currentQuestion === totalQuestions) {
+                    document.getElementById('nextQ').innerHTML = 'إنهاء <i class="fas fa-check"></i>';
+                }
+            } else {
+                showResults();
+            }
+        }
+
+        function prevQuestion() {
+            if (currentQuestion > 1) {
+                document.getElementById(`q${currentQuestion}`).style.display = 'none';
+                currentQuestion--;
+                document.getElementById(`q${currentQuestion}`).style.display = 'block';
+                
+                document.getElementById('testProgress').textContent = `${currentQuestion} / 30`;
+                document.getElementById('testProgressBar').style.width = `${(currentQuestion / 30) * 100}%`;
+                
+                document.getElementById('nextQ').innerHTML = 'التالي <i class="fas fa-arrow-left"></i>';
+                
+                if (currentQuestion === 1) {
+                    document.getElementById('prevQ').disabled = true;
+                }
+            }
+        }
+
+        function showResults() {
+            goToSlide(14);
+        }
+
+        // Initialize first slide
+        goToSlide(10);
+    </script>
+</body>
+</html>
